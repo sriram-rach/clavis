@@ -79,12 +79,24 @@ process.stdin.on('end', () => {
       } catch (e) {}
     }
 
+    // Update indicator — check if auto-update applied this session
+    let updateTag = '';
+    try {
+      const updateFile = path.join(os.tmpdir(), 'clavis', 'update-result.json');
+      if (fs.existsSync(updateFile)) {
+        const result = JSON.parse(fs.readFileSync(updateFile, 'utf8'));
+        if (result.updated) {
+          updateTag = `\x1b[33m\u2B06 updated\x1b[0m \u2502 `;
+        }
+      }
+    } catch (e) {}
+
     // Output
     const dirname = path.basename(dir);
     if (task) {
-      process.stdout.write(`\x1b[2m${model}\x1b[0m \u2502 \x1b[1m${task}\x1b[0m \u2502 \x1b[2m${dirname}\x1b[0m${elapsed}${ctx}`);
+      process.stdout.write(`${updateTag}\x1b[2m${model}\x1b[0m \u2502 \x1b[1m${task}\x1b[0m \u2502 \x1b[2m${dirname}\x1b[0m${elapsed}${ctx}`);
     } else {
-      process.stdout.write(`\x1b[2m${model}\x1b[0m \u2502 \x1b[2m${dirname}\x1b[0m${elapsed}${ctx}`);
+      process.stdout.write(`${updateTag}\x1b[2m${model}\x1b[0m \u2502 \x1b[2m${dirname}\x1b[0m${elapsed}${ctx}`);
     }
   } catch (e) {
     // Silent fail — don't break statusline on parse errors
