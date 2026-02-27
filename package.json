@@ -1,6 +1,6 @@
 {
   "name": "@sriram-rach/clavis",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Powerful enhancements for Claude Code — unlock the full potential of your AI coding assistant",
   "bin": {
     "clavis": "bin/cli.js"
