@@ -1,5 +1,5 @@
 {
-  "name": "clavis",
+  "name": "@sriram-rach/clavis",
   "version": "1.0.0",
   "description": "Powerful enhancements for Claude Code — unlock the full potential of your AI coding assistant",
   "bin": {
