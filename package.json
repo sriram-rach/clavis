@@ -3,7 +3,7 @@
   "version": "1.0.1",
   "description": "Powerful enhancements for Claude Code — unlock the full potential of your AI coding assistant",
   "bin": {
-    "clavis": "./bin/cli.js"
+    "clavis": "bin/cli.js"
   },
   "files": [
     "bin/",
@@ -24,7 +24,7 @@
   "author": "Sriram Rachamadugu",
   "repository": {
     "type": "git",
-    "url": "https://github.com/sriram-rachamadugu/clavis"
+    "url": "git+https://github.com/sriram-rachamadugu/clavis.git"
   },
   "bugs": {
     "url": "https://github.com/sriram-rachamadugu/clavis/issues"
