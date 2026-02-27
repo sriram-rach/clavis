@@ -79,14 +79,14 @@ process.stdin.on('end', () => {
       } catch (e) {}
     }
 
-    // Update indicator — check if auto-update applied this session
+    // Update indicator — check cached update-check result
     let updateTag = '';
     try {
-      const updateFile = path.join(os.tmpdir(), 'clavis', 'update-result.json');
-      if (fs.existsSync(updateFile)) {
-        const result = JSON.parse(fs.readFileSync(updateFile, 'utf8'));
-        if (result.updated) {
-          updateTag = `\x1b[33m\u2B06 updated\x1b[0m \u2502 `;
+      const cacheFile = path.join(homeDir, '.claude', 'cache', 'clavis-update-check.json');
+      if (fs.existsSync(cacheFile)) {
+        const cache = JSON.parse(fs.readFileSync(cacheFile, 'utf8'));
+        if (cache.update_available) {
+          updateTag = `\x1b[33m\u2B06 update available\x1b[0m \u2502 `;
         }
       }
     } catch (e) {}

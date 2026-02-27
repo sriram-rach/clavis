@@ -13,7 +13,6 @@ const settingsPath = path.join(claudeDir, 'settings.json');
 
 const hookSrc = path.join(__dirname, '..', 'hook', 'statusline.js');
 const updateHookSrc = path.join(__dirname, '..', 'hook', 'check-update.js');
-const updateWorkerSrc = path.join(__dirname, '..', 'hook', 'check-update-worker.js');
 const pkgJson = require(path.join(__dirname, '..', 'package.json'));
 
 const statusLineConfig = {
@@ -65,12 +64,17 @@ rl.question('  Enable auto-update? (Y/n) ', (answer) => {
 });
 
 function installAutoUpdate() {
-  // Copy check-update hook + worker
+  // Copy check-update hook (single file, no worker needed)
   const destHook = path.join(hooksDir, 'clavis-check-update.js');
-  const destWorker = path.join(hooksDir, 'clavis-check-update-worker.js');
   fs.copyFileSync(updateHookSrc, destHook);
-  fs.copyFileSync(updateWorkerSrc, destWorker);
   console.log('  Copied auto-update hook to .claude/hooks/');
+
+  // Clean up legacy worker file if present
+  const legacyWorker = path.join(hooksDir, 'clavis-check-update-worker.js');
+  if (fs.existsSync(legacyWorker)) {
+    fs.unlinkSync(legacyWorker);
+    console.log('  Removed legacy worker file');
+  }
 
   // Write version file
   const versionFile = path.join(hooksDir, 'clavis-version.txt');
@@ -89,21 +93,35 @@ function installAutoUpdate() {
   if (!settings.hooks) settings.hooks = {};
   if (!Array.isArray(settings.hooks.SessionStart)) settings.hooks.SessionStart = [];
 
-  const hookCommand = 'node .claude/hooks/clavis-check-update.js';
+  // Remove old-format entries (pre-1.3.0: { type, command } directly in array)
+  const before = settings.hooks.SessionStart.length;
+  settings.hooks.SessionStart = settings.hooks.SessionStart.filter(
+    h => !(h.command && h.command.includes('clavis-check-update') && !h.hooks)
+  );
+  if (settings.hooks.SessionStart.length < before) {
+    console.log('  Removed old-format SessionStart hook entry');
+  }
+
+  // Check if new-format entry already exists
   const alreadyExists = settings.hooks.SessionStart.some(
-    h => h.command === hookCommand
+    h => h.hooks && h.hooks.some(inner => inner.command && inner.command.includes('clavis-check-update'))
   );
 
   if (alreadyExists) {
     console.log('  SessionStart hook already configured — skipped');
   } else {
     settings.hooks.SessionStart.push({
-      type: 'command',
-      command: hookCommand
+      hooks: [
+        {
+          type: 'command',
+          command: 'node .claude/hooks/clavis-check-update.js'
+        }
+      ]
     });
-    fs.writeFileSync(settingsPath, JSON.stringify(settings, null, 2) + '\n');
-    console.log('  Added SessionStart hook to .claude/settings.json');
   }
+
+  fs.writeFileSync(settingsPath, JSON.stringify(settings, null, 2) + '\n');
+  console.log('  Updated .claude/settings.json');
 }
 
 function printSuccess() {
