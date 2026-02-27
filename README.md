@@ -1,46 +1,109 @@
+```
+      ___           ___           ___           ___                       ___
+     /\  \         /\__\         /\  \         /\__\          ___        /\  \
+    /::\  \       /:/  /        /::\  \       /:/  /         /\  \      /::\  \
+   /:/\:\  \     /:/  /        /:/\:\  \     /:/  /          \:\  \    /:/\ \  \
+  /:/  \:\  \   /:/  /        /::\~\:\  \   /:/__/  ___      /::\__\  _\:\~\ \  \
+ /:/__/ \:\__\ /:/__/        /:/\:\ \:\__\  |:|  | /\__\  __/:/\/__/ /\ \:\ \ \__\
+ \:\  \  \/__/ \:\  \        \/__\:\/:/  /  |:|  |/:/  / /\/:/  /    \:\ \:\ \/__/
+  \:\  \        \:\  \            \::/  /   |:|__/:/  /  \::/__/      \:\ \:\__\
+   \:\  \        \:\  \           /:/  /     \::::/__/    \:\__\       \:\/:/  /
+    \:\__\        \:\__\         /:/  /       ~~~~         \/__/        \::/  /
+     \/__/         \/__/         \/__/                                   \/__/
+```
+
 # clavis
 
-Install a color-coded context usage statusline for [Claude Code](https://docs.anthropic.com/en/docs/claude-code).
+> Powerful enhancements for [Claude Code](https://docs.anthropic.com/en/docs/claude-code) — unlock the full potential of your AI coding assistant.
 
-```
+[![npm version](https://img.shields.io/npm/v/clavis.svg)](https://www.npmjs.com/package/clavis)
+[![license](https://img.shields.io/npm/l/clavis.svg)](https://github.com/sriram-rachamadugu/clavis/blob/main/LICENSE)
+
+## Installation
+
+### One-time use (no install needed)
+
+```bash
 npx clavis
 ```
 
-Run in any repo to add a statusline that shows:
+### Global install
+
+```bash
+npm install -g clavis
+```
+
+Then run `clavis` in any repo.
+
+### Local install (per-project)
+
+```bash
+npm install --save-dev clavis
+```
+
+Then run via npx or add it to your npm scripts:
+
+```json
+{
+  "scripts": {
+    "setup-claude": "clavis"
+  }
+}
+```
+
+## Features
+
+### Context Usage Statusline
+
+A real-time statusline that keeps you informed while Claude works:
 
 - **Model** — which Claude model is active
 - **Current task** — the in-progress task from your todo list
 - **Directory** — current working directory
 - **Context usage** — a 10-segment progress bar with color coding
 
-## Context bar colors
+#### Context bar colors
 
-| Usage | Color |
-|-------|-------|
-| < 50% | Green |
-| 50–65% | Yellow |
-| 65–80% | Orange |
-| > 80% | Red (blinking) |
+| Usage   | Color            |
+|---------|------------------|
+| < 50%   | Green            |
+| 50–65%  | Yellow           |
+| 65–80%  | Orange           |
+| > 80%   | Red (blinking)   |
 
-## What it does
+*More features coming soon.*
+
+## How It Works
 
 Running `npx clavis` in your repo root will:
 
-1. Create `.claude/hooks/statusline.js` — the statusline script
+1. Create `.claude/hooks/statusline.js` — the statusline hook
 2. Add a `statusLine` entry to `.claude/settings.json` — tells Claude Code to use it
 
 It's idempotent — running it again skips the settings update if already configured.
 
 ## Uninstall
 
-Delete the two files it created:
+Delete the hook and remove the settings entry:
 
-```
+```bash
 rm .claude/hooks/statusline.js
 ```
 
 Then remove the `"statusLine"` key from `.claude/settings.json`.
 
+## Versioning
+
+This project follows [Semantic Versioning](https://semver.org/):
+
+- **MAJOR** — breaking changes to CLI behavior or hook API
+- **MINOR** — new features (backwards-compatible)
+- **PATCH** — bug fixes and minor improvements
+
+## Contributing
+
+Contributions are welcome! Please open an issue or submit a pull request.
+
 ## License
 
-MIT
+[MIT](LICENSE) — see the [LICENSE](LICENSE) file for details.

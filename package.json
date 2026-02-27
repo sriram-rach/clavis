@@ -1,24 +1,36 @@
 {
   "name": "clavis",
   "version": "1.0.0",
-  "description": "Install a color-coded context usage statusline for Claude Code",
+  "description": "Powerful enhancements for Claude Code — unlock the full potential of your AI coding assistant",
   "bin": {
     "clavis": "./bin/cli.js"
   },
   "files": [
     "bin/",
-    "hook/"
+    "hook/",
+    "LICENSE"
   ],
   "keywords": [
     "claude",
     "claude-code",
     "statusline",
     "context-window",
-    "cli"
+    "cli",
+    "developer-tools",
+    "ai",
+    "productivity"
   ],
   "license": "MIT",
+  "author": "Sriram Rachamadugu",
   "repository": {
     "type": "git",
     "url": "https://github.com/sriram-rachamadugu/clavis"
+  },
+  "bugs": {
+    "url": "https://github.com/sriram-rachamadugu/clavis/issues"
+  },
+  "homepage": "https://github.com/sriram-rachamadugu/clavis#readme",
+  "engines": {
+    "node": ">=16.0.0"
   }
 }
