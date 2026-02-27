@@ -1,0 +1,24 @@
+{
+  "name": "clavis",
+  "version": "1.0.0",
+  "description": "Install a color-coded context usage statusline for Claude Code",
+  "bin": {
+    "clavis": "./bin/cli.js"
+  },
+  "files": [
+    "bin/",
+    "hook/"
+  ],
+  "keywords": [
+    "claude",
+    "claude-code",
+    "statusline",
+    "context-window",
+    "cli"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sriram-rachamadugu/clavis"
+  }
+}
