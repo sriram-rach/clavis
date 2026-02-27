@@ -16,21 +16,21 @@
 
 > Powerful enhancements for [Claude Code](https://docs.anthropic.com/en/docs/claude-code) — unlock the full potential of your AI coding assistant.
 
-[![npm version](https://img.shields.io/npm/v/clavis.svg)](https://www.npmjs.com/package/clavis)
-[![license](https://img.shields.io/npm/l/clavis.svg)](https://github.com/sriram-rachamadugu/clavis/blob/main/LICENSE)
+[![npm version](https://img.shields.io/npm/v/@sriram-rach/clavis.svg)](https://www.npmjs.com/package/@sriram-rach/clavis)
+[![license](https://img.shields.io/npm/l/@sriram-rach/clavis.svg)](https://github.com/sriram-rach/clavis/blob/main/LICENSE)
 
 ## Installation
 
 ### One-time use (no install needed)
 
 ```bash
-npx clavis
+npx @sriram-rach/clavis
 ```
 
 ### Global install
 
 ```bash
-npm install -g clavis
+npm install -g @sriram-rach/clavis
 ```
 
 Then run `clavis` in any repo.
@@ -38,7 +38,7 @@ Then run `clavis` in any repo.
 ### Local install (per-project)
 
 ```bash
-npm install --save-dev clavis
+npm install --save-dev @sriram-rach/clavis
 ```
 
 Then run via npx or add it to your npm scripts:
@@ -75,7 +75,7 @@ A real-time statusline that keeps you informed while Claude works:
 
 ## How It Works
 
-Running `npx clavis` in your repo root will:
+Running `npx @sriram-rach/clavis` in your repo root will:
 
 1. Create `.claude/hooks/statusline.js` — the statusline hook
 2. Add a `statusLine` entry to `.claude/settings.json` — tells Claude Code to use it
