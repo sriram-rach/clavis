@@ -60,6 +60,7 @@ A real-time statusline that keeps you informed while Claude works:
 - **Model** — which Claude model is active
 - **Current task** — the in-progress task from your todo list
 - **Directory** — current working directory
+- **Session time** — elapsed time since the session started (e.g. `⏱ 12m05s` or `⏱ 1h30m`)
 - **Context usage** — a 10-segment progress bar with color coding
 
 #### Context bar colors
@@ -70,6 +71,13 @@ A real-time statusline that keeps you informed while Claude works:
 | 50–65%  | Yellow           |
 | 65–80%  | Orange           |
 | > 80%   | Red (blinking)   |
+
+#### Session time format
+
+| Duration    | Display    |
+|-------------|------------|
+| < 1 hour    | `12m05s`   |
+| ≥ 1 hour    | `1h30m`    |
 
 *More features coming soon.*
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Clavis — Claude Code context usage statusline
-// Shows: model | current task | directory | context usage bar
+// Shows: model | current task | directory | session time | context usage bar
 
 const fs = require('fs');
 const path = require('path');
@@ -54,12 +54,37 @@ process.stdin.on('end', () => {
       }
     }
 
+    // Session timer — persist start time in a temp file keyed by session ID
+    let elapsed = '';
+    if (session) {
+      const tmpDir = path.join(os.tmpdir(), 'clavis');
+      const timerFile = path.join(tmpDir, `session-${session}.txt`);
+      try {
+        let startTime;
+        if (fs.existsSync(timerFile)) {
+          startTime = parseInt(fs.readFileSync(timerFile, 'utf8'), 10);
+        } else {
+          startTime = Date.now();
+          fs.mkdirSync(tmpDir, { recursive: true });
+          fs.writeFileSync(timerFile, String(startTime));
+        }
+        const secs = Math.floor((Date.now() - startTime) / 1000);
+        const h = Math.floor(secs / 3600);
+        const m = Math.floor((secs % 3600) / 60);
+        const s = secs % 60;
+        const time = h > 0
+          ? `${h}h${String(m).padStart(2, '0')}m`
+          : `${m}m${String(s).padStart(2, '0')}s`;
+        elapsed = ` \u2502 \x1b[2m\u23f1 ${time}\x1b[0m`;
+      } catch (e) {}
+    }
+
     // Output
     const dirname = path.basename(dir);
     if (task) {
-      process.stdout.write(`\x1b[2m${model}\x1b[0m \u2502 \x1b[1m${task}\x1b[0m \u2502 \x1b[2m${dirname}\x1b[0m${ctx}`);
+      process.stdout.write(`\x1b[2m${model}\x1b[0m \u2502 \x1b[1m${task}\x1b[0m \u2502 \x1b[2m${dirname}\x1b[0m${elapsed}${ctx}`);
     } else {
-      process.stdout.write(`\x1b[2m${model}\x1b[0m \u2502 \x1b[2m${dirname}\x1b[0m${ctx}`);
+      process.stdout.write(`\x1b[2m${model}\x1b[0m \u2502 \x1b[2m${dirname}\x1b[0m${elapsed}${ctx}`);
     }
   } catch (e) {
     // Silent fail — don't break statusline on parse errors
