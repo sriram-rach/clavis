@@ -55,31 +55,11 @@ Then run via npx or add it to your npm scripts:
 
 ### Context Usage Statusline
 
-A real-time statusline that keeps you informed while Claude works:
+A real-time statusline that shows you the active model, current task, working directory, session time, and context usage at a glance — with a color-coded progress bar that shifts from green to red as context fills up.
 
-- **Model** — which Claude model is active
-- **Current task** — the in-progress task from your todo list
-- **Directory** — current working directory
-- **Session time** — elapsed time since the session started (e.g. `⏱ 12m05s` or `⏱ 1h30m`)
-- **Context usage** — a 10-segment progress bar with color coding
+### Auto-Update
 
-#### Context bar colors
-
-| Usage   | Color            |
-|---------|------------------|
-| < 50%   | Green            |
-| 50–65%  | Yellow           |
-| 65–80%  | Orange           |
-| > 80%   | Red (blinking)   |
-
-#### Session time format
-
-| Duration    | Display    |
-|-------------|------------|
-| < 1 hour    | `12m05s`   |
-| ≥ 1 hour    | `1h30m`    |
-
-*More features coming soon.*
+Clavis automatically checks for updates at the start of each Claude Code session and silently updates the statusline hook in the background — no manual intervention needed.
 
 ## How It Works
 
@@ -99,14 +79,6 @@ rm .claude/hooks/statusline.js
 ```
 
 Then remove the `"statusLine"` key from `.claude/settings.json`.
-
-## Versioning
-
-This project follows [Semantic Versioning](https://semver.org/):
-
-- **MAJOR** — breaking changes to CLI behavior or hook API
-- **MINOR** — new features (backwards-compatible)
-- **PATCH** — bug fixes and minor improvements
 
 ## Contributing
 
