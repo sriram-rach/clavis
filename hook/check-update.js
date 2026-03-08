@@ -77,7 +77,11 @@ const child = spawn(process.execPath, ['-e', `
 
       const pkgDir = path.join(tmpDir, 'package', 'hook');
       const hooksDir = path.join(cwd, '.claude', 'hooks');
-      const files = [['statusline.js', 'statusline.js'], ['check-update.js', 'clavis-check-update.js']];
+      const files = [
+        ['statusline.js',   'statusline.js'],
+        ['check-update.js', 'clavis-check-update.js'],
+        ['track-tools.js',  'clavis-track-tools.js'],
+      ];
       for (const [src, dest] of files) {
         const s = path.join(pkgDir, src);
         if (fs.existsSync(s)) fs.copyFileSync(s, path.join(hooksDir, dest));
