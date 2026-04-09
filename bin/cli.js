@@ -13,6 +13,7 @@ const settingsPath = path.join(claudeDir, 'settings.json');
 
 const hookSrc = path.join(__dirname, '..', 'hook', 'statusline.js');
 const updateHookSrc = path.join(__dirname, '..', 'hook', 'check-update.js');
+const trackToolsSrc = path.join(__dirname, '..', 'hook', 'track-tools.js');
 const pkgJson = require(path.join(__dirname, '..', 'package.json'));
 
 const statusLineConfig = {
@@ -46,22 +47,68 @@ if (settings.statusLine) {
   console.log('  Added statusLine config to .claude/settings.json');
 }
 
-// 4. Ask about auto-update
+// 4. Ask about features
 const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
 
-rl.question('  Enable auto-update? (Y/n) ', (answer) => {
-  rl.close();
+rl.question('  Enable tool call tracking? (Y/n) ', (answer1) => {
+  const trackTools = !answer1 || answer1.toLowerCase() === 'y' || answer1.toLowerCase() === 'yes';
 
-  const enable = !answer || answer.toLowerCase() === 'y' || answer.toLowerCase() === 'yes';
-
-  if (enable) {
-    installAutoUpdate();
+  if (trackTools) {
+    installToolTracking();
   } else {
-    console.log('  Auto-update skipped');
+    console.log('  Tool tracking skipped');
   }
 
-  printSuccess();
+  rl.question('  Enable auto-update? (Y/n) ', (answer2) => {
+    rl.close();
+
+    const enable = !answer2 || answer2.toLowerCase() === 'y' || answer2.toLowerCase() === 'yes';
+
+    if (enable) {
+      installAutoUpdate();
+    } else {
+      console.log('  Auto-update skipped');
+    }
+
+    printSuccess();
+  });
 });
+
+function installToolTracking() {
+  const destHook = path.join(hooksDir, 'clavis-track-tools.js');
+  fs.copyFileSync(trackToolsSrc, destHook);
+  console.log('  Copied tool tracking hook to .claude/hooks/clavis-track-tools.js');
+
+  let settings = {};
+  try {
+    settings = JSON.parse(fs.readFileSync(settingsPath, 'utf8'));
+  } catch (e) {
+    settings = {};
+  }
+
+  if (!settings.hooks) settings.hooks = {};
+  if (!Array.isArray(settings.hooks.PostToolUse)) settings.hooks.PostToolUse = [];
+
+  const alreadyExists = settings.hooks.PostToolUse.some(
+    h => h.hooks && h.hooks.some(inner => inner.command && inner.command.includes('clavis-track-tools'))
+  );
+
+  if (alreadyExists) {
+    console.log('  PostToolUse hook already configured — skipped');
+  } else {
+    settings.hooks.PostToolUse.push({
+      hooks: [
+        {
+          type: 'command',
+          command: 'node .claude/hooks/clavis-track-tools.js'
+        }
+      ]
+    });
+  }
+
+  fs.writeFileSync(settingsPath, JSON.stringify(settings, null, 2) + '\n');
+  console.log('  Updated .claude/settings.json');
+}
 
 function installAutoUpdate() {
   // Copy check-update hook (single file, no worker needed)
